@@ -8,7 +8,7 @@ import sys
 class Table(object):
     '''Class represent latex tables.'''
     
-    template = r'''\begin{table}
+    template = r'''\begin{table}[h]
 \centering
 \caption{}
 \begin{tabular}{%s}
