@@ -44,7 +44,10 @@ class Table(object):
 def main():
     tb = Table()
     count = 0
-    for i in sys.stdin:
+    while True:
+        i = sys.stdin.readline()
+        if not i:
+            break
         i = i.strip()
         if not i:
             continue
