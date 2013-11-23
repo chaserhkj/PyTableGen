@@ -14,10 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import wrapped_class
 
 class Table(object):
     '''Class represent latex tables.'''
+
+    __metaclass__ = wrapped_class.wrapped_metaclass
+    __values__ = {
+        "fmt" : (str, "")
+    }
     
     template = r'''\begin{table}[h]
 \centering
@@ -27,14 +32,8 @@ class Table(object):
 \end{tabular}
 \end{table}'''
 
-    def __init__(self, fmt = ""):
-        self.setFmt(fmt)
+    def __init__(self):
         self._data = []
-
-    def setFmt(self, fmt):
-        if not isinstance(fmt, str):
-            raise ValueError, "Expecting fmt to be a string."
-        self._fmt = fmt
 
     def append(self, data):
         self._data.append(data)

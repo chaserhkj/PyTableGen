@@ -34,7 +34,7 @@ def main():
             count = len(entries)
         tb.append(entries)
     fmt = "|" + "|".join(["c"] * count) + "|"
-    tb.setFmt(fmt)
+    tb.set_fmt(fmt)
     print tb
 
 if __name__=="__main__":
