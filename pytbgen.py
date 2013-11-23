@@ -16,42 +16,7 @@
 
 import sys
 
-
-
-class Table(object):
-    '''Class represent latex tables.'''
-    
-    template = r'''\begin{table}[h]
-\centering
-\caption{}
-\begin{tabular}{%s}
-%s
-\end{tabular}
-\end{table}'''
-
-    def __init__(self, fmt = ""):
-        self.setFmt(fmt)
-        self._data = []
-
-    def setFmt(self, fmt):
-        if not isinstance(fmt, str):
-            raise ValueError, "Expecting fmt to be a string."
-        self._fmt = fmt
-
-    def append(self, data):
-        self._data.append(data)
-
-    def insert(self, index, data):
-        self._data.insert(index, data)
-
-    def remove(self, index):
-        del self.data[index]
-
-    def __str__(self):
-        s = [" & ".join(i) for i in self._data]
-        s = " \\\\ \\hline\n".join(s)
-        s = "\\hline\n" + s + " \\\\ \\hline"
-        return Table.template%(self._fmt, s)
+from PyTableGen.Table import Table
 
 
 def main():
