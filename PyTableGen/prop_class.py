@@ -33,15 +33,18 @@ def gen_prop_attrs(props):
                 getattr(self, "set_%s"%i)(props[i][1])
     attrs["__init__"] = init
 
-    for i in props:
-        def fget(self):
-            return getattr(self, "_%s"%i)
-        def fset(self, v):
-            if not isinstance(v, props[i][0]):
-                raise ValueError, "%s must be type %s"%(i, props[i][0].__name__)
-            setattr(self, "_%s"%i, v)
-        attrs["get_%s"%i] = fget
-        attrs["set_%s"%i] = fset
+    for j in props:
+        def fgen(i):
+            def fget(self):
+                return getattr(self, "_%s"%i)
+            def fset(self, v):
+                if not isinstance(v, props[i][0]):
+                    raise ValueError, "%s must be type %s"%(i, props[i][0].__name__)
+                setattr(self, "_%s"%i, v)
+            return fget, fset
+        fget, fset = fgen(j)
+        attrs["get_%s"%j] = fget
+        attrs["set_%s"%j] = fset
     return attrs
 
 
