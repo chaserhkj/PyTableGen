@@ -14,14 +14,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import prop_class
+import prop_class, itertools
+
+
+def chunks(l, n, f):
+        """ Yield successive n-sized chunks from l, if not long enough to get n elements, fill with f.
+        """
+        for i in xrange(0, len(l), n):
+            li = l[i:i+n]
+            li = li + [f] * (n - len(li))
+            yield li
+
+
+
 
 class Table(object):
     '''Class represent latex tables.'''
 
     __metaclass__ = prop_class.prop_metaclass
     __props__ = {
-        "fmt" : (str, "")
+        "fmt" : (str, "c"),
+        "wrap_length" : (int, -1),
+        "header_count" : (int , 1),
+        "trans" : (bool, False)
     }
     
     template = r'''\begin{table}[h]
@@ -45,8 +60,22 @@ class Table(object):
         del self.data[index]
 
     def __str__(self):
-        s = [" & ".join(i) for i in self._data]
+        data = self._data
+        if self._wrap_length > 0:
+            max_len = max(map(len, data))
+            data = map(lambda i : i + [""]*(max_len - len(i)), data)
+            headers = data[:self._header_count]
+            data = data[self._header_count:]
+            data = list(chunks(data, self._wrap_length, [""]*max_len))
+            data = [headers + i for i in data]
+            data = map(lambda i : list(itertools.chain(*i)), zip(*data))
+
+        if self._trans:
+            data = zip(*data)
+        s = [" & ".join(i) for i in data]
         s = " \\\\ \\hline\n".join(s)
         s = "\\hline\n" + s + " \\\\ \\hline"
-        return Table.template%(self._fmt, s)
+        max_len = max(map(len, data))
+        fmt = "|" + "|".join([self._fmt] * max_len) + "|"
+        return Table.template%(fmt, s)
 

@@ -14,13 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
+import sys, optparse
 
 from PyTableGen.Table import Table
 
 
 def main():
-    tb = Table()
+    parser = optparse.OptionParser()
+    parser.add_option("-t", "--trans", dest="trans", action="store_true",
+            help="Do transpose to the table.",
+            default=None)
+    parser.add_option("-w", "--wrap", dest="wrap_length", type="int",
+            default=None,
+            help="Wrap to multiple columns with the specific max length.")
+    parser.add_option("-H", "--headers", dest="header_count", type="int",
+            default=None,
+            help="Set the count of the header rows.")
+    options, _ = parser.parse_args()
+    options = vars(options)
+    options = {i:options[i] for i in options if not options[i] is None}
+    tb = Table(**options)
     count = 0
     while True:
         i = sys.stdin.readline()
@@ -33,8 +46,6 @@ def main():
         if len(entries) > count:
             count = len(entries)
         tb.append(entries)
-    fmt = "|" + "|".join(["c"] * count) + "|"
-    tb.set_fmt(fmt)
     print tb
 
 if __name__=="__main__":
