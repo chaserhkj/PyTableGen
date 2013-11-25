@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import wrapped_class
+import prop_class
 
 class Table(object):
     '''Class represent latex tables.'''
 
-    __metaclass__ = wrapped_class.wrapped_metaclass
-    __values__ = {
+    __metaclass__ = prop_class.prop_metaclass
+    __props__ = {
         "fmt" : (str, "")
     }
     
