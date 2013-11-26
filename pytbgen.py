@@ -35,17 +35,21 @@ def main():
     options = {i:options[i] for i in options if not options[i] is None}
     tb = Table(**options)
     count = 0
-    while True:
-        i = sys.stdin.readline()
-        if not i:
-            break
-        i = i.strip()
-        if not i:
-            continue
-        entries = i.split("\t")
-        if len(entries) > count:
-            count = len(entries)
-        tb.append(entries)
+    try:
+        while True:
+            i = sys.stdin.readline()
+            if not i:
+                break
+            i = i.strip()
+            if not i:
+                continue
+            entries = i.split("\t")
+            if len(entries) > count:
+                count = len(entries)
+            tb.append(entries)
+    except KeyboardInterrupt:
+        print Quit
+        sys.exit(1)
     print tb
 
 if __name__=="__main__":
